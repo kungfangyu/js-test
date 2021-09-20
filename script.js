@@ -1,10 +1,3 @@
-/*
- * @Date: 2021-09-16 14:24:36
- * @LastEditors: Fane Kung
- * @LastEditTime: 2021-09-20 15:20:12
- * @FilePath: /js-test/script.js
- */
-
 //1.
 function fibonacci(position) {
   if (position <= 2) {
