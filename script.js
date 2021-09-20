@@ -1,7 +1,7 @@
 /*
  * @Date: 2021-09-16 14:24:36
  * @LastEditors: Fane Kung
- * @LastEditTime: 2021-09-18 11:56:07
+ * @LastEditTime: 2021-09-20 15:20:12
  * @FilePath: /js-test/script.js
  */
 
@@ -81,38 +81,50 @@ console.log(myStack.size())
 
 
 //4.
-let currentPage, totalPage, renderPages ;
-function getPagination(offset, limit, total){
-  let totalPage = Math.ceil(total / limit);
-  let currentPage = Math.ceil(offset / limit) + 1 ;
-  let renderPages = []
-
-  if(currentPage <= 3) {
-    for(let i = currentPage/currentPage; i<currentPage+5; i++){
-      renderPages += i
-    }
-  } else if (currentPage > 4) {
-    for(let i=3; i<8; i++){
-      renderPages += i
-    }
-  } else {
-    for(let i=currentPage-2; i >= currentPage-3 && i < currentPage+3; i++){
-      renderPages += i 
-    }
+function getRenderPages(totalPage, pageIndex){
+  const renderPages = [];
+  const pages =  totalPage > 5 ? 5 : totalPage;
+  for(let i =0; i < pages; i++) {
+    renderPages.push(i + pageIndex);
   }
+  return renderPages
+}  
 
-  arr = renderPages.split("").splice(0,5);
-  renderPages = arr;
 
-  console.log('currentPage:'+ currentPage,'totalPage:'+totalPage,'renderPages:'+[renderPages])
+function getPagination(offset, limit, total){
+const totalPage = Math.ceil(total / limit);
+const currentPage = Math.ceil(offset / limit) + 1 > totalPage ? totalPage : Math.ceil(offset / limit) + 1; 
+const isFirstTwo = currentPage < 3; 
+const isLastTwo  = totalPage - currentPage < 2;
+if(isFirstTwo) {
+  return {
+    totalPage,
+    currentPage,
+    renderPages: getRenderPages(totalPage, 1)
+  }
+} if(isLastTwo) {
+  return {
+    totalPage,
+    currentPage,
+    renderPages: getRenderPages(totalPage, totalPage - 4)
+  }
+} else {
+    return {
+      totalPage,
+      currentPage,
+      renderPages: getRenderPages(totalPage, currentPage - 2),
+  }
+}
 }
 
 
-getPagination(0, 5, 33) // { currentPage: 1, totalPage: 7, renderPages: [1,2,3,4,5] }
-getPagination(5, 5, 33) // { currentPage: 2, totalPage: 7, renderPages: [1,2,3,4,5] }
-getPagination(10, 5, 33) // { currentPage: 3, totalPage: 7, renderPages: [1,2,3,4,5] }
-getPagination(15, 5, 33) // { currentPage: 4, totalPage: 7, renderPages: [2,3,4,5,6] }
-getPagination(20, 5, 33) // { currentPage: 5, totalPage: 7, renderPages: [3,4,5,6,7] }
-getPagination(25, 5, 33) // { currentPage: 6, totalPage: 7, renderPages: [3,4,5,6,7] }
-getPagination(30, 5, 33) // { currentPage: 7, totalPage: 7, renderPages: [3,4,5,6,7] }
+const {
+  totalPage,
+  currentPage,
+  renderPages,
+} = getPagination(30, 5, 33);
+
+
+console.log(currentPage ,totalPage, renderPages)
+
 
